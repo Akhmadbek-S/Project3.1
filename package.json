@@ -25,5 +25,9 @@
   "bugs": {
     "url": "https://github.com/Akhmadbek-S/UberProject/issues"
   },
+  "browserslist": [
+    "defaults and supports es6-module",
+    "maintained node versions"
+  ],
   "homepage": "https://github.com/Akhmadbek-S/UberProject#readme"
 }
