@@ -196,6 +196,11 @@
             font-size: 11px;
         }
     }
+    .carousel {
+        .prev, .next {
+            display: none;
+        }
+    }
 }
 @media (max-width: 569px) {
     .container {
