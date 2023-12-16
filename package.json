@@ -29,5 +29,8 @@
     "defaults and supports es6-module",
     "maintained node versions"
   ],
-  "homepage": "https://github.com/Akhmadbek-S/UberProject#readme"
+  "homepage": "https://github.com/Akhmadbek-S/UberProject#readme",
+  "dependencies": {
+    "animate.css": "^4.1.1"
+  }
 }

@@ -17,7 +17,7 @@
 //     });
 // });
 
-//(СКРИПТЫ ДЛЯ ТINY)
+//(СКРИПТЫ ДЛЯ СЛАЙДЕРА)
 const slider = tns({
     container: '.carousel__inner',
     items: 1,
@@ -42,8 +42,9 @@ document.querySelector('.next').addEventListener('click', function () {
     slider.goTo('next');
 });
 
-//(СКРИПТЫ ДЛЯ ТАБОВ)
-(function($) {
+
+(function($) { //ЗАПУСКАЕТСЯ JQUERY
+    //(СКРИПТЫ ДЛЯ ТАБОВ)
     $(function() {
       
     $('ul.catalog__tabs').on('click', 'li:not(.catalog__tab_active)', function() {
@@ -61,7 +62,98 @@ document.querySelector('.next').addEventListener('click', function () {
             })
         })
     }
-    toggleSlide('.catalog-item__link');
-    toggleSlide('.catalog-item__back');
-});
+    toggleSlide('.catalog-item__content');
+    toggleSlide('.catalog-item__list');
+    });
+
+    //СКРИПТЫ ДЛЯ ВЫСКАКИВАНИЯ ФОРМ
+    $('[data-modal=consultation]').on('click', function() {
+        $('.overlay, #consultation').fadeIn();
+    });
+    
+    $('.modal__close').on('click', function() {
+        $('.overlay, #consultation, #order, #mini').fadeOut();
+    });
+
+    $('.button_mini').each(function(i) {
+        $(this).on('click', function() {
+            $('#order .modal__descr').text($('.catalog-item__subtitle').eq(i).text());
+            $('.overlay, #order').fadeIn();
+        });
+    });
+
+    //СКРИПТЫ ДЛЯ ВАЛИДАЦИИ ФОРМ
+    function valideForm(form){
+        $(form).validate({
+            rules: {
+                name: {
+                    required: true,
+                    minlength: 2
+                },
+                phone: "required",
+                email: {
+                    required: true,
+                    email: true
+                }
+            },
+            messages: {
+                name: {
+                    required: "Введите свое имя",
+                    minlength: jQuery.validator.format("Необходимо как минимум {0} символа")
+                },
+                phone: "Введите свой номер телефона",
+                email: {
+                    required: "Введите свою почту",
+                    email: "Неправильно введен адрес почты"
+                }
+            }
+        });
+    };
+    valideForm('#consultation-form');
+    valideForm('#consultation form');
+    valideForm('#order form');
+
+    //МАСКА ВВОДА НОМЕРА ТЕЛЕФОНА
+    $('input[name=phone]').mask("+7 (999) 999-99-99");
+
+    //СКРИПТ ОТПРВКИ ПИСЕМ С САЙТА
+    $('form').submit(function(e) {
+        e.preventDefault();
+
+        if (!$(this).valid()) {
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "mailer/smart.php",
+            data: $(this).serialize()
+        }).done(function() {
+            $(this).find("input").val("");
+
+            $('#consultation, #order').fadeOut();
+            $('.overlay, #mini').fadeIn('slow');
+
+            $('form').trigger('reset');
+        });
+        return false;
+    });
+
+    //ИКОНКА ВВЕРХ И ПЛАВНЫЙ СКРОЛЛ
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 1600) {
+            $('.pageup').fadeIn();
+        } else {
+            $('.pageup').fadeOut();
+        }
+    });
+
+    $("a[href='#top']").click(function() {
+        const _href = $(this).attr("href");
+        $("html, body").animate({scrollTop: $(_href).offset().top+"px"});
+        return false;
+    });
+
+    //АКТИВАЦИЯ WOW.JS
+    new WOW().init();
 })(jQuery);
